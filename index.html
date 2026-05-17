@@ -46,18 +46,27 @@
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- Hero (Pure Black + Animation) -->
   <header id="hero">
-    <div class="section-bg"></div>
-    <div class="container hero-content">
-      <div class="hero-badge" data-i18n="hero.badge">Based in Dengfeng, Henan — Home of Shaolin</div>
-      <div class="hero-title-wrap" id="heroTitleWrap">
-        <div class="hero-title-main">Kung Fu</div>
-        <div class="hero-title-accent">Awakening</div>
-        <div class="hero-title-line"></div>
-        <div class="hero-title-sub">DENGFENG · SHAOLIN</div>
+    <div class="hero-black-bg"></div>
+    <div class="hero-title-wrap" id="heroTitleWrap">
+      <div class="hero-title-main">Kung Fu</div>
+      <div class="hero-title-accent">Awakening</div>
+      <div class="hero-title-line"></div>
+      <div class="hero-title-sub">DENGFENG · SHAOLIN</div>
+      <div class="hero-scroll-hint">
+        <span class="scroll-arrow">&#8595;</span>
+        <span data-i18n="hero.scroll">Scroll Down</span>
       </div>
-      <p class="hero-subtitle" data-i18n="hero.subtitle">
+    </div>
+  </header>
+
+  <!-- Welcome (appears after scroll) -->
+  <section id="welcome">
+    <div class="section-bg"></div>
+    <div class="container">
+      <div class="welcome-badge" data-i18n="hero.badge">Based in Dengfeng, Henan — Home of Shaolin</div>
+      <p class="welcome-subtitle" data-i18n="hero.subtitle">
         Your all-in-one journey to Shaolin Temple. Visa guidance, airport pickup, local guiding, kung fu school enrollment — we handle everything so you can focus on the experience.
       </p>
       <div class="hero-cta">
@@ -70,7 +79,7 @@
         <div class="stat"><strong>24/7</strong> <span data-i18n="hero.stat3">Local Support</span></div>
       </div>
     </div>
-  </header>
+  </section>
 
   <!-- Services -->
   <section id="services">

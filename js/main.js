@@ -1,13 +1,14 @@
 // ==================== Hero Scroll Animation ====================
 const heroTitleWrap = document.getElementById('heroTitleWrap');
+const navbar = document.getElementById('navbar');
 let heroAnimated = false;
+let lastScrollY = 0;
 
 function playHeroAnimation() {
   if (!heroTitleWrap) return;
-  // Reset
   heroTitleWrap.classList.remove('animate');
   heroAnimated = false;
-  // Force reflow then play
+  // Force reflow
   void heroTitleWrap.offsetWidth;
   heroTitleWrap.classList.add('animate');
   heroAnimated = true;
@@ -15,23 +16,31 @@ function playHeroAnimation() {
 
 // Play on load
 window.addEventListener('load', () => {
-  setTimeout(playHeroAnimation, 200);
+  setTimeout(playHeroAnimation, 100);
 });
 
-// Replay when hero scrolls back into view
-const heroObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !heroAnimated) {
-      playHeroAnimation();
-    }
-    if (!entry.isIntersecting) {
-      heroAnimated = false;
-    }
-  });
-}, { threshold: 0.3 });
+// Nav visibility + animation replay on scroll
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const viewH = window.innerHeight;
+  const heroEl = document.getElementById('hero');
 
-const heroEl = document.getElementById('hero');
-if (heroEl) heroObserver.observe(heroEl);
+  // Nav: visible only when scrolled past 60% of hero
+  if (scrollY > viewH * 0.6) {
+    navbar.classList.add('visible');
+  } else {
+    navbar.classList.remove('visible');
+  }
+
+  // Hero animation: reset when leaving hero, replay when returning to top
+  if (scrollY < 10) {
+    if (!heroAnimated) playHeroAnimation();
+  } else if (scrollY > viewH * 0.5) {
+    heroAnimated = false;
+  }
+
+  lastScrollY = scrollY;
+}, { passive: true });
 
 // ==================== i18n Translation System ====================
 const translations = {
@@ -52,6 +61,7 @@ const translations = {
     'hero.stat1': 'Travelers Served',
     'hero.stat2': 'Partner Schools',
     'hero.stat3': 'Local Support',
+    'hero.scroll': 'Scroll Down',
     // Services
     'services.tag': 'What We Do',
     'services.title': 'One Platform, Everything You Need',
@@ -189,6 +199,7 @@ const translations = {
     'hero.stat1': '已服务旅客',
     'hero.stat2': '合作武校',
     'hero.stat3': '本地支持',
+    'hero.scroll': '向下滑动',
     'services.tag': '我们的服务',
     'services.title': '一个平台，满足所有需求',
     'services.desc': '不用再在旅行社、导游和学校网站之间来回切换。我们一站式搞定。',
@@ -316,6 +327,7 @@ const translations = {
     'hero.stat1': '방문객',
     'hero.stat2': '제휴 학교',
     'hero.stat3': '현지 지원',
+    'hero.scroll': '스크롤 다운',
     'services.tag': '서비스',
     'services.title': '하나의 플랫폼, 필요한 모든 것',
     'services.desc': '여행사, 가이드, 학교 웹사이트를 전전하지 마세요. 우리가 모두 통합했습니다.',
@@ -443,6 +455,7 @@ const translations = {
     'hero.stat1': 'Путешественников',
     'hero.stat2': 'Школ-партнёров',
     'hero.stat3': 'Поддержка 24/7',
+    'hero.scroll': 'Скролл вниз',
     'services.tag': 'Услуги',
     'services.title': 'Одна платформа — всё, что нужно',
     'services.desc': 'Хватит метаться между агентствами, гидами и сайтами школ. Мы объединили всё.',

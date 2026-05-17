@@ -177,6 +177,8 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
 
 /* ===== Hero Title Animation ===== */
 .hero-title-wrap {
+  position: relative;
+  z-index: 1;
   text-align: center;
   will-change: transform;
 }
@@ -187,8 +189,7 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   color: var(--white);
   letter-spacing: -.03em;
   line-height: 1;
-  opacity: 1;
-  transition: none;
+  opacity: 0;
 }
 
 .hero-title-accent {
@@ -197,17 +198,15 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   color: var(--red);
   letter-spacing: -.02em;
   line-height: 1.1;
-  opacity: 1;
-  transition: none;
+  opacity: 0;
 }
 
 .hero-title-line {
-  width: 80px;
+  width: 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
   margin: 20px auto;
-  opacity: 1;
-  transition: none;
+  opacity: 0;
 }
 
 .hero-title-sub {
@@ -216,30 +215,61 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   letter-spacing: .3em;
   color: rgba(255,255,255,.35);
   margin-top: 8px;
-  transition: none;
+  opacity: 0;
+}
+
+/* Scroll hint */
+.hero-scroll-hint {
+  margin-top: 48px;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-arrow {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,.25);
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.hero-scroll-hint span:last-child {
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .15em;
+  color: rgba(255,255,255,.2);
+  text-transform: uppercase;
 }
 
 /* Animated state */
-.hero-title-wrap.animate .hero-title-main,
-.hero-title-wrap.animate .hero-title-accent,
-.hero-title-wrap.animate .hero-title-sub {
-  animation: heroFadeUp 1s cubic-bezier(.22,.61,.36,1) forwards;
+.hero-title-wrap.animate .hero-title-main {
+  animation: heroFadeUp 1s cubic-bezier(.25,.46,.45,.94) .1s forwards;
 }
 
 .hero-title-wrap.animate .hero-title-accent {
-  animation-delay: .15s;
+  animation: heroFadeUp 1s cubic-bezier(.25,.46,.45,.94) .25s forwards;
 }
 
 .hero-title-wrap.animate .hero-title-line {
-  animation: heroLineGrow .7s cubic-bezier(.22,.61,.36,1) .4s forwards;
+  animation: heroLineGrow .7s cubic-bezier(.25,.46,.45,.94) .45s forwards;
 }
 
 .hero-title-wrap.animate .hero-title-sub {
-  animation-delay: .5s;
+  animation: heroFadeUp .8s cubic-bezier(.25,.46,.45,.94) .55s forwards;
+}
+
+.hero-title-wrap.animate .hero-scroll-hint {
+  animation: heroFadeUp .8s cubic-bezier(.25,.46,.45,.94) .8s forwards;
 }
 
 @keyframes heroFadeUp {
-  from { opacity: 0; transform: translateY(40px) translateZ(0); }
+  from { opacity: 0; transform: translateY(36px) translateZ(0); }
   to { opacity: 1; transform: translateY(0) translateZ(0); }
 }
 
@@ -258,7 +288,14 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   background: rgba(10,10,10,.85);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255,255,255,.06);
-  transition: all .3s;
+  transition: transform .4s cubic-bezier(.4,0,.2,1), opacity .4s cubic-bezier(.4,0,.2,1);
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+#navbar.visible {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 #navbar.scrolled {
@@ -330,32 +367,43 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   transition: all .3s;
 }
 
-/* ===== Hero ===== */
+/* ===== Hero (Pure Black + Animation) ===== */
 #hero {
-  min-height: 100vh;
+  position: relative;
+  height: 100vh;
   display: flex;
   align-items: center;
-  padding: 120px 0 80px;
+  justify-content: center;
+  overflow: hidden;
 }
 
-#hero .section-bg {
+.hero-black-bg {
+  position: absolute;
+  inset: 0;
+  background: #000000;
+  z-index: 0;
+}
+
+/* ===== Welcome Section (after hero) ===== */
+#welcome {
+  position: relative;
+  padding: 120px 0;
+  text-align: center;
+}
+
+#welcome .section-bg {
   background: url('../images/hero-bg.jpg') center/cover no-repeat;
 }
 
-#hero .section-bg::after {
+#welcome .section-bg::after {
   background: linear-gradient(180deg,
-    rgba(10,10,10,.85) 0%,
-    rgba(15,5,5,.75) 40%,
-    rgba(10,10,10,.9) 100%
+    rgba(10,10,10,.92) 0%,
+    rgba(15,5,5,.78) 50%,
+    rgba(10,10,10,.95) 100%
   );
 }
 
-.hero-content {
-  text-align: center;
-  max-width: 800px;
-}
-
-.hero-badge {
+.welcome-badge {
   display: inline-block;
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.12);
@@ -363,18 +411,16 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   padding: 8px 22px;
   font-size: .82rem;
   color: rgba(255,255,255,.8);
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   backdrop-filter: blur(8px);
 }
 
-.hero-subtitle {
+.welcome-subtitle {
   font-size: 1.2rem;
   color: rgba(255,255,255,.6);
-  margin: 24px 0 40px;
+  margin: 0 auto 40px;
   line-height: 1.8;
   max-width: 620px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .hero-cta {
@@ -423,12 +469,12 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
 
 .btn-full { width: 100%; text-align: center; }
 
-.hero-stats {
+#welcome .hero-stats {
   display: flex;
   gap: 56px;
   justify-content: center;
-  margin-top: 64px;
-  padding-top: 40px;
+  margin-top: 50px;
+  padding-top: 36px;
   border-top: 1px solid rgba(255,255,255,.08);
 }
 
@@ -1144,13 +1190,13 @@ section .container {
   .steps { flex-direction: column; align-items: center; }
   .step-arrow { transform: rotate(90deg); padding-top: 0; }
   .step { max-width: 100%; }
-  .hero-stats { gap: 28px; flex-wrap: wrap; }
+  #welcome .hero-stats { gap: 28px; flex-wrap: wrap; }
   .image-gallery { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 480px) {
   .container { padding: 0 16px; }
-  #hero { padding: 100px 0 60px; }
+  #hero { min-height: 100vh; }
   section { padding: 72px 0 !important; }
   .packages-grid { grid-template-columns: 1fr; }
   .services-grid { grid-template-columns: 1fr; }
