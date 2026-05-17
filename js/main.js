@@ -1,12 +1,37 @@
-// ==================== Loading Screen ====================
+// ==================== Hero Scroll Animation ====================
+const heroTitleWrap = document.getElementById('heroTitleWrap');
+let heroAnimated = false;
+
+function playHeroAnimation() {
+  if (!heroTitleWrap) return;
+  // Reset
+  heroTitleWrap.classList.remove('animate');
+  heroAnimated = false;
+  // Force reflow then play
+  void heroTitleWrap.offsetWidth;
+  heroTitleWrap.classList.add('animate');
+  heroAnimated = true;
+}
+
+// Play on load
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    const loader = document.getElementById('loader');
-    loader.classList.add('hidden');
-    // Remove from DOM after transition
-    setTimeout(() => { loader.style.display = 'none'; }, 800);
-  }, 2200);
+  setTimeout(playHeroAnimation, 200);
 });
+
+// Replay when hero scrolls back into view
+const heroObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !heroAnimated) {
+      playHeroAnimation();
+    }
+    if (!entry.isIntersecting) {
+      heroAnimated = false;
+    }
+  });
+}, { threshold: 0.3 });
+
+const heroEl = document.getElementById('hero');
+if (heroEl) heroObserver.observe(heroEl);
 
 // ==================== i18n Translation System ====================
 const translations = {
