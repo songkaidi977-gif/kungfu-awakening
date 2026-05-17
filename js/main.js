@@ -1,3 +1,13 @@
+// ==================== Loading Screen ====================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const loader = document.getElementById('loader');
+    loader.classList.add('hidden');
+    // Remove from DOM after transition
+    setTimeout(() => { loader.style.display = 'none'; }, 800);
+  }, 2200);
+});
+
 // ==================== i18n Translation System ====================
 const translations = {
   en: {
