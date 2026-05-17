@@ -180,25 +180,26 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   position: relative;
   z-index: 1;
   text-align: center;
-  will-change: transform;
 }
 
 .hero-title-main {
-  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
   font-weight: 800;
   color: var(--white);
   letter-spacing: -.03em;
   line-height: 1;
   opacity: 0;
+  transform: translateY(36px);
 }
 
 .hero-title-accent {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
   font-weight: 800;
   color: var(--red);
   letter-spacing: -.02em;
   line-height: 1.1;
   opacity: 0;
+  transform: translateY(36px);
 }
 
 .hero-title-line {
@@ -216,12 +217,14 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   color: rgba(255,255,255,.35);
   margin-top: 8px;
   opacity: 0;
+  transform: translateY(36px);
 }
 
 /* Scroll hint */
 .hero-scroll-hint {
   margin-top: 48px;
   opacity: 0;
+  transform: translateY(36px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -231,6 +234,9 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
 .scroll-arrow {
   font-size: 1.2rem;
   color: rgba(255,255,255,.25);
+}
+
+.hero-title-wrap.animate .scroll-arrow {
   animation: scrollBounce 2s ease-in-out infinite;
 }
 
@@ -247,35 +253,65 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   text-transform: uppercase;
 }
 
-/* Animated state */
-.hero-title-wrap.animate .hero-title-main {
-  animation: heroFadeUp 1s cubic-bezier(.25,.46,.45,.94) .1s forwards;
-}
-
-.hero-title-wrap.animate .hero-title-accent {
-  animation: heroFadeUp 1s cubic-bezier(.25,.46,.45,.94) .25s forwards;
+/* Animated state — uses transitions, more reliable */
+.hero-title-wrap.animate .hero-title-main,
+.hero-title-wrap.animate .hero-title-accent,
+.hero-title-wrap.animate .hero-title-line,
+.hero-title-wrap.animate .hero-title-sub,
+.hero-title-wrap.animate .hero-scroll-hint {
+  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
+              transform .8s cubic-bezier(.25,.46,.45,.94);
 }
 
 .hero-title-wrap.animate .hero-title-line {
-  animation: heroLineGrow .7s cubic-bezier(.25,.46,.45,.94) .45s forwards;
+  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
+              width .8s cubic-bezier(.25,.46,.45,.94);
+}
+
+.hero-title-wrap.animate .hero-title-main {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .1s;
+}
+
+.hero-title-wrap.animate .hero-title-accent {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .22s;
+}
+
+.hero-title-wrap.animate .hero-title-line {
+  width: 80px;
+  opacity: 1;
+  transition-delay: .38s;
 }
 
 .hero-title-wrap.animate .hero-title-sub {
-  animation: heroFadeUp .8s cubic-bezier(.25,.46,.45,.94) .55s forwards;
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .48s;
 }
 
 .hero-title-wrap.animate .hero-scroll-hint {
-  animation: heroFadeUp .8s cubic-bezier(.25,.46,.45,.94) .8s forwards;
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .62s;
 }
 
-@keyframes heroFadeUp {
-  from { opacity: 0; transform: translateY(36px) translateZ(0); }
-  to { opacity: 1; transform: translateY(0) translateZ(0); }
+/* Reset state — no transitions (instant hide for replay) */
+.hero-title-wrap.reset .hero-title-main,
+.hero-title-wrap.reset .hero-title-accent,
+.hero-title-wrap.reset .hero-title-line,
+.hero-title-wrap.reset .hero-title-sub,
+.hero-title-wrap.reset .hero-scroll-hint {
+  transition: none !important;
+  opacity: 0;
+  transform: translateY(36px);
 }
 
-@keyframes heroLineGrow {
-  from { width: 0; opacity: 0; }
-  to { width: 80px; opacity: 1; }
+.hero-title-wrap.reset .hero-title-line {
+  width: 0;
+  opacity: 0;
 }
 
 /* ===== Navigation ===== */

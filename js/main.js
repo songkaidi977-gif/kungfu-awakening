@@ -2,44 +2,45 @@
 const heroTitleWrap = document.getElementById('heroTitleWrap');
 const navbar = document.getElementById('navbar');
 let heroAnimated = false;
-let lastScrollY = 0;
 
 function playHeroAnimation() {
   if (!heroTitleWrap) return;
+  // Reset: hide everything instantly
   heroTitleWrap.classList.remove('animate');
+  heroTitleWrap.classList.add('reset');
   heroAnimated = false;
-  // Force reflow
-  void heroTitleWrap.offsetWidth;
-  heroTitleWrap.classList.add('animate');
-  heroAnimated = true;
+
+  // Force reflow, then animate in
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      heroTitleWrap.classList.remove('reset');
+      heroTitleWrap.classList.add('animate');
+      heroAnimated = true;
+    });
+  });
 }
 
-// Play on load
-window.addEventListener('load', () => {
-  setTimeout(playHeroAnimation, 100);
-});
+// Play ASAP on page load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => playHeroAnimation());
+} else {
+  playHeroAnimation();
+}
 
 // Nav visibility + animation replay on scroll
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   const viewH = window.innerHeight;
-  const heroEl = document.getElementById('hero');
 
-  // Nav: visible only when scrolled past 60% of hero
-  if (scrollY > viewH * 0.6) {
-    navbar.classList.add('visible');
-  } else {
-    navbar.classList.remove('visible');
-  }
+  // Nav: visible when scrolled past 60% of hero
+  navbar.classList.toggle('visible', scrollY > viewH * 0.6);
 
-  // Hero animation: reset when leaving hero, replay when returning to top
-  if (scrollY < 10) {
+  // Hero animation replay when returning to top
+  if (scrollY < 5) {
     if (!heroAnimated) playHeroAnimation();
   } else if (scrollY > viewH * 0.5) {
     heroAnimated = false;
   }
-
-  lastScrollY = scrollY;
 }, { passive: true });
 
 // ==================== i18n Translation System ====================
