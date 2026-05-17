@@ -190,6 +190,8 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   line-height: 1;
   opacity: 0;
   transform: translateY(36px);
+  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
+              transform .8s cubic-bezier(.25,.46,.45,.94);
 }
 
 .hero-title-accent {
@@ -200,6 +202,8 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   line-height: 1.1;
   opacity: 0;
   transform: translateY(36px);
+  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
+              transform .8s cubic-bezier(.25,.46,.45,.94);
 }
 
 .hero-title-line {
@@ -208,6 +212,8 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
   margin: 20px auto;
   opacity: 0;
+  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
+              width .8s cubic-bezier(.25,.46,.45,.94);
 }
 
 .hero-title-sub {
@@ -218,6 +224,8 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   margin-top: 8px;
   opacity: 0;
   transform: translateY(36px);
+  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
+              transform .8s cubic-bezier(.25,.46,.45,.94);
 }
 
 /* Scroll hint */
@@ -229,6 +237,8 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
+              transform .8s cubic-bezier(.25,.46,.45,.94);
 }
 
 .scroll-arrow {
@@ -253,21 +263,7 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   text-transform: uppercase;
 }
 
-/* Animated state — uses transitions, more reliable */
-.hero-title-wrap.animate .hero-title-main,
-.hero-title-wrap.animate .hero-title-accent,
-.hero-title-wrap.animate .hero-title-line,
-.hero-title-wrap.animate .hero-title-sub,
-.hero-title-wrap.animate .hero-scroll-hint {
-  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
-              transform .8s cubic-bezier(.25,.46,.45,.94);
-}
-
-.hero-title-wrap.animate .hero-title-line {
-  transition: opacity .8s cubic-bezier(.25,.46,.45,.94),
-              width .8s cubic-bezier(.25,.46,.45,.94);
-}
-
+/* Animated state — only target values + delays */
 .hero-title-wrap.animate .hero-title-main {
   opacity: 1;
   transform: translateY(0);

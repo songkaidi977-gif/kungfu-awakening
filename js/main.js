@@ -5,22 +5,20 @@ let heroAnimated = false;
 
 function playHeroAnimation() {
   if (!heroTitleWrap) return;
-  // Reset: hide everything instantly
-  heroTitleWrap.classList.remove('animate');
-  heroTitleWrap.classList.add('reset');
-  heroAnimated = false;
 
-  // Force reflow, then animate in
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      heroTitleWrap.classList.remove('reset');
-      heroTitleWrap.classList.add('animate');
-      heroAnimated = true;
-    });
-  });
+  if (heroAnimated) {
+    // Replay: hide instantly
+    heroTitleWrap.classList.add('reset');
+    heroTitleWrap.classList.remove('animate');
+    void heroTitleWrap.offsetWidth; // force reflow
+    heroTitleWrap.classList.remove('reset');
+  }
+
+  heroTitleWrap.classList.add('animate');
+  heroAnimated = true;
 }
 
-// Play ASAP on page load
+// Play on load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => playHeroAnimation());
 } else {
@@ -32,10 +30,10 @@ window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   const viewH = window.innerHeight;
 
-  // Nav: visible when scrolled past 60% of hero
+  // Nav: show only when scrolled past 60% of hero
   navbar.classList.toggle('visible', scrollY > viewH * 0.6);
 
-  // Hero animation replay when returning to top
+  // Replay animation when scrolling back to top
   if (scrollY < 5) {
     if (!heroAnimated) playHeroAnimation();
   } else if (scrollY > viewH * 0.5) {
