@@ -1,28 +1,15 @@
-// ==================== Hero Scroll Animation ====================
+// ==================== Hero Animation Replay ====================
 const heroTitleWrap = document.getElementById('heroTitleWrap');
 const navbar = document.getElementById('navbar');
-let heroAnimated = false;
+const heroAnimatedEls = document.querySelectorAll('.hero-title-main, .hero-title-accent, .hero-title-line, .hero-title-sub, .hero-scroll-hint');
+let heroWasOffScreen = false;
 
-function playHeroAnimation() {
-  if (!heroTitleWrap) return;
-
-  if (heroAnimated) {
-    // Replay: hide instantly
-    heroTitleWrap.classList.add('reset');
-    heroTitleWrap.classList.remove('animate');
-    void heroTitleWrap.offsetWidth; // force reflow
-    heroTitleWrap.classList.remove('reset');
-  }
-
-  heroTitleWrap.classList.add('animate');
-  heroAnimated = true;
-}
-
-// Play on load
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => playHeroAnimation());
-} else {
-  playHeroAnimation();
+function restartHeroAnimation() {
+  heroAnimatedEls.forEach(el => {
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  });
 }
 
 // Nav visibility + animation replay on scroll
@@ -33,11 +20,15 @@ window.addEventListener('scroll', () => {
   // Nav: show only when scrolled past 60% of hero
   navbar.classList.toggle('visible', scrollY > viewH * 0.6);
 
+  // Track if hero was off screen
+  if (scrollY > viewH * 0.5) {
+    heroWasOffScreen = true;
+  }
+
   // Replay animation when scrolling back to top
-  if (scrollY < 5) {
-    if (!heroAnimated) playHeroAnimation();
-  } else if (scrollY > viewH * 0.5) {
-    heroAnimated = false;
+  if (scrollY < 5 && heroWasOffScreen) {
+    restartHeroAnimation();
+    heroWasOffScreen = false;
   }
 }, { passive: true });
 
