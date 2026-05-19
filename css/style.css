@@ -381,6 +381,43 @@ h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacin
   );
 }
 
+/* Language buttons in Welcome section */
+.welcome-lang {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.wlang-btn {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.5);
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .25s;
+  letter-spacing: .02em;
+  backdrop-filter: blur(8px);
+}
+
+.wlang-btn:hover {
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  border-color: rgba(255,255,255,.2);
+}
+
+.wlang-btn.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+  box-shadow: 0 4px 16px rgba(196,30,30,.3);
+}
+
 .welcome-badge {
   display: inline-block;
   background: rgba(255,255,255,.06);

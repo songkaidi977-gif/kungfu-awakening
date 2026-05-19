@@ -643,6 +643,30 @@ if (savedLang && savedLang !== 'en') {
   }
 }
 
+// ==================== Welcome Language Buttons ====================
+document.querySelectorAll('.wlang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.dataset.wlang;
+    document.querySelectorAll('.wlang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Sync nav dropdown
+    langDropdown.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
+    const match = langDropdown.querySelector(`[data-lang="${lang}"]`);
+    if (match) match.classList.add('active');
+    langToggle.querySelector('.lang-label').textContent = langNames[lang] || lang.toUpperCase();
+    applyLanguage(lang);
+  });
+});
+
+// Also sync welcome buttons when switching language via nav
+const origApply = applyLanguage;
+applyLanguage = function(lang) {
+  origApply(lang);
+  document.querySelectorAll('.wlang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.wlang === lang);
+  });
+};
+
 // ==================== Navbar Scroll Effect ====================
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
