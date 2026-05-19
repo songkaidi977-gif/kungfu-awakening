@@ -560,6 +560,8 @@ const translations = {
 };
 
 // ==================== Apply Language ====================
+const langNames = { en: 'EN', zh: '中文', ko: '한국', ru: 'РУС' };
+
 function applyLanguage(lang) {
   const t = translations[lang] || translations['en'];
   document.documentElement.lang = lang;
@@ -584,88 +586,75 @@ function applyLanguage(lang) {
     }
   });
 
-  // Update body class for font
+  // Update body class
   document.body.classList.remove('lang-en', 'lang-zh', 'lang-ko', 'lang-ru');
   document.body.classList.add('lang-' + lang);
 
-  // Store preference
+  // Update welcome language buttons
+  document.querySelectorAll('.wlang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.wlang === lang);
+  });
+
+  // Update nav dropdown
+  const navDropdown = document.getElementById('langDropdown');
+  if (navDropdown) {
+    navDropdown.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
+    const match = navDropdown.querySelector(`[data-lang="${lang}"]`);
+    if (match) match.classList.add('active');
+  }
+
+  // Update nav button label
+  const navBtn = document.getElementById('langToggle');
+  if (navBtn) {
+    const label = navBtn.querySelector('.lang-label');
+    if (label) label.textContent = langNames[lang] || lang.toUpperCase();
+  }
+
+  // Store
   localStorage.setItem('kfa-lang', lang);
 }
 
-// ==================== Language Switcher ====================
-const langToggle = document.getElementById('langToggle');
-const langDropdown = document.getElementById('langDropdown');
-const langSwitch = document.querySelector('.lang-switch');
+// ==================== Language Switcher (Nav) ====================
+(function() {
+  const langSwitch = document.querySelector('.lang-switch');
+  const langToggle = document.getElementById('langToggle');
+  const langDropdown = document.getElementById('langDropdown');
+  if (!langSwitch || !langToggle || !langDropdown) return;
 
-langToggle.addEventListener('click', (e) => {
-  e.stopPropagation();
-  langSwitch.classList.toggle('open');
-});
-
-document.addEventListener('click', (e) => {
-  if (!langSwitch.contains(e.target)) {
-    langSwitch.classList.remove('open');
-  }
-});
-
-// Language selection
-const langNames = { en: 'EN', zh: '中文', ko: '한국', ru: 'РУС' };
-
-langDropdown.querySelectorAll('.lang-option').forEach(option => {
-  option.addEventListener('click', (e) => {
-    e.preventDefault();
-    const lang = option.dataset.lang;
-
-    // Update active state
-    langDropdown.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
-    option.classList.add('active');
-
-    // Update button label
-    langToggle.querySelector('.lang-label').textContent = langNames[lang] || lang.toUpperCase();
-
-    // Apply translations
-    applyLanguage(lang);
-
-    // Close dropdown
-    langSwitch.classList.remove('open');
+  langToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    langSwitch.classList.toggle('open');
   });
-});
 
-// Restore saved language on load
-const savedLang = localStorage.getItem('kfa-lang');
-if (savedLang && savedLang !== 'en') {
-  const target = langDropdown.querySelector(`[data-lang="${savedLang}"]`);
-  if (target) {
-    langDropdown.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
-    target.classList.add('active');
-    langToggle.querySelector('.lang-label').textContent = langNames[savedLang] || savedLang.toUpperCase();
+  document.addEventListener('click', (e) => {
+    if (!langSwitch.contains(e.target)) {
+      langSwitch.classList.remove('open');
+    }
+  });
+
+  langDropdown.querySelectorAll('.lang-option').forEach(option => {
+    option.addEventListener('click', (e) => {
+      e.preventDefault();
+      const lang = option.dataset.lang;
+      applyLanguage(lang);
+      langSwitch.classList.remove('open');
+    });
+  });
+
+  // Restore saved language
+  const savedLang = localStorage.getItem('kfa-lang');
+  if (savedLang && savedLang !== 'en') {
     applyLanguage(savedLang);
   }
-}
+})();
 
 // ==================== Welcome Language Buttons ====================
 document.querySelectorAll('.wlang-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const lang = btn.dataset.wlang;
-    document.querySelectorAll('.wlang-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    // Sync nav dropdown
-    langDropdown.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
-    const match = langDropdown.querySelector(`[data-lang="${lang}"]`);
-    if (match) match.classList.add('active');
-    langToggle.querySelector('.lang-label').textContent = langNames[lang] || lang.toUpperCase();
     applyLanguage(lang);
   });
 });
-
-// Also sync welcome buttons when switching language via nav
-const origApply = applyLanguage;
-applyLanguage = function(lang) {
-  origApply(lang);
-  document.querySelectorAll('.wlang-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.wlang === lang);
-  });
-};
 
 // ==================== Navbar Scroll Effect ====================
 const navbar = document.getElementById('navbar');
