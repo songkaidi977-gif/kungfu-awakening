@@ -657,7 +657,6 @@ document.querySelectorAll('.wlang-btn').forEach(btn => {
 });
 
 // ==================== Navbar Scroll Effect ====================
-const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 20);
 });
