@@ -685,14 +685,20 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 
 // ==================== Form Submission ====================
 const form = document.getElementById('inquiry-form');
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = form.querySelector('button[type="submit"]');
   const originalText = btn.textContent;
   btn.textContent = 'Sending...';
   btn.disabled = true;
 
-  setTimeout(() => {
+  try {
+    const formData = new FormData(form);
+    const res = await fetch('https://formsubmit.co/ajax/songkaidi977@gmail.com', {
+      method: 'POST',
+      body: formData
+    });
+
     const lang = localStorage.getItem('kfa-lang') || 'en';
     const msgs = {
       en: "Inquiry sent! We'll get back to you within 24 hours.",
@@ -702,9 +708,12 @@ form.addEventListener('submit', (e) => {
     };
     showToast(msgs[lang] || msgs.en);
     form.reset();
-    btn.textContent = originalText;
-    btn.disabled = false;
-  }, 1000);
+  } catch (err) {
+    showToast('Failed to send. Please email us directly.');
+  }
+
+  btn.textContent = originalText;
+  btn.disabled = false;
 });
 
 // ==================== Toast ====================
