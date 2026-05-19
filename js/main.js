@@ -694,9 +694,11 @@ form.addEventListener('submit', async (e) => {
 
   try {
     const formData = new FormData(form);
-    const res = await fetch('https://formsubmit.co/ajax/songkaidi977@gmail.com', {
+    const res = await fetch('https://script.google.com/macros/s/AKfycbzUXPyUXlFUuoyXeUixlAgakBi7yHr_BIzoVGHP1UHklC1wxorVfa_ce9qM0sEeBwwD/exec', {
       method: 'POST',
-      body: formData
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(formData))
     });
 
     const lang = localStorage.getItem('kfa-lang') || 'en';
